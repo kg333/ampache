@@ -967,7 +967,7 @@ final class PlayAction implements ApplicationActionInterface
                 $stream_rate = 0;
                 if (isset($troptions['bitrate'])) {
                     // note that the bitrate transcode option is stored as metric bits i.e. kilobits*1000 instead of kilobits*1024
-                    $stream_rate = $troptions['bitrate'] / 1024;
+                    $stream_rate = $troptions['bitrate'];
                 } elseif (!empty($transcode_settings)) {
                     $stream_rate = Stream::get_max_bitrate($media, $transcode_settings, $troptions);
                 }
@@ -975,7 +975,7 @@ final class PlayAction implements ApplicationActionInterface
                 // We always guess MP3 content length even when not required, since that codec calculates properly
                 if ($this->requestParser->getFromRequest('content_length') == 'required' || $transcode_to == 'mp3') {
                     if ($media->time > 0 && $stream_rate > 0) {
-                        $stream_size = (int)(($media->time * $stream_rate * 1024) / 8);
+                        $stream_size = (int)(($media->time * $stream_rate * 1001) / 8);
                     } else {
                         $this->logger->debug(
                             'Bad media duration / stream bitrate. Content-length calculation skipped.',
